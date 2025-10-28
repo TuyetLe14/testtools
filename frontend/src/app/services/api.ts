@@ -6,27 +6,31 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  private BASE_URL = 'http://127.0.0.1:5000/api'; // Flask backend
+  private BASE = 'http://localhost:5000/api';
 
   constructor(private http: HttpClient) { }
 
   getProjects(): Observable<any> {
-    return this.http.get(`${this.BASE_URL}/projects`);
+    return this.http.get(`${this.BASE}/projects`);
   }
 
-  createTestCase(data: any): Observable<any> {
-    return this.http.post(`${this.BASE_URL}/testcases`, data);
+  createProject(data:any): Observable<any> {
+    return this.http.post(`${this.BASE}/projects`, data);
   }
 
-  runManualTest(id: number): Observable<any> {
-    return this.http.post(`${this.BASE_URL}/run/manual/${id}`, {});
+  createTestCase(projectId:number, data:any): Observable<any> {
+    return this.http.post(`${this.BASE}/projects/${projectId}/tests`, data);
   }
 
-  runAutomation(): Observable<any> {
-    return this.http.post(`${this.BASE_URL}/run/automation`, {});
+  getTests(projectId:number): Observable<any> {
+    return this.http.get(`${this.BASE}/projects/${projectId}/tests`);
   }
 
-  runPerformance(): Observable<any> {
-    return this.http.post(`${this.BASE_URL}/run/performance`, {});
+  runTest(testId:number): Observable<any> {
+    return this.http.post(`${this.BASE}/tests/${testId}/run`, {});
+  }
+
+  getRun(runId:number): Observable<any> {
+    return this.http.get(`${this.BASE}/runs/${runId}`);
   }
 }
