@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-automation',
   imports: [],
   templateUrl: './automation.html',
-  styleUrl: './automation.css',
+  styleUrls: ['./automation.css'],
 })
 export class AutomationComponent {
 

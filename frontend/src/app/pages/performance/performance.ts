@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-performance',
   imports: [],
   templateUrl: './performance.html',
-  styleUrl: './performance.css',
+  styleUrls: [ './performance.css'],
 })
 export class PerformanceComponent {
 

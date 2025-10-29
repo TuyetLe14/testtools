@@ -1,29 +1,35 @@
 <div class="container p-3">
   <h3>Manual Tests</h3>
   <label>Project:
-    <select [(ngModel)]="selectedProjectId" (change)="loadTests()">
+    <select [ngModel]="selectedProjectId" (ngModelChange)="onProjectChange($event)">
       <option [value]="0">-- select --</option>
       <option *ngFor="let p of projects" [value]="p.id">{{p.name}}</option>
     </select>
   </label>
 
-  <div class="mt-3">
+  <div class="mt-3" [formGroup]="newTestForm">
     <h4>Create Test Case</h4>
-    <input placeholder="Title" formControlName="title" [(ngModel)]="newTestForm.value.title"/>
-    <div *ngFor="let s of steps.controls; index as i">
-      <input [(ngModel)]="steps.controls[i].value" />
+    <input placeholder="Title" formControlName="title" />
+
+    <div formArrayName="steps">
+      <div *ngFor="let s of steps.controls; let i = index">
+        <input [formControlName]="i" placeholder="Step {{ i + 1 }}" />
+      </div>
     </div>
-    <button (click)="addStep()">Add step</button>
-    <button (click)="createTest()">Create</button>
+
+    <button type="button" (click)="addStep()">Add step</button>
+    <button type="button" (click)="createTest()">Create</button>
   </div>
 
   <hr />
   <h4>Test Cases</h4>
   <ul>
     <li *ngFor="let t of testcases">
-      <strong>{{t.title}}</strong>
+      <strong>{{ t.title }}</strong>
       <button (click)="runTest(t)">Run</button>
-      <div *ngIf="t.steps"><small *ngFor="let s of t.steps">{{s}} | </small></div>
+      <div *ngIf="t.steps">
+        <small *ngFor="let s of t.steps">{{ s }} | </small>
+      </div>
     </li>
   </ul>
 </div>

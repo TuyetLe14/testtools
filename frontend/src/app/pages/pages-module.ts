@@ -1,22 +1,17 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard';
 import { ManualTestComponent } from './manual-test/manual-test';
 import { AutomationComponent } from './automation/automation';
 import { PerformanceComponent } from './performance/performance';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [
+  imports: [
+    RouterModule,
     DashboardComponent,
     ManualTestComponent,
     AutomationComponent,
     PerformanceComponent
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule
   ],
   exports: [
     DashboardComponent,
@@ -25,4 +20,4 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     PerformanceComponent
   ]
 })
-export class PagesModule { }
+export class PagesModule {}
