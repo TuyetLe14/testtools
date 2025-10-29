@@ -1,13 +1,20 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, RouterLink],
   templateUrl: './app.html',
-  styleUrls: ['./app.css']
+  styleUrls: ['./app.css'],
 })
-export class App {
+export class AppComponent {
   title = 'Tester Hub';
+  menu = [
+    { path: '/dashboard', label: 'Dashboard', icon: '📊' },
+    { path: '/manual-test', label: 'Manual Test', icon: '🧪' },
+    { path: '/automation', label: 'Automation', icon: '🤖' },
+    { path: '/performance', label: 'Performance', icon: '⚡' },
+  ];
 }

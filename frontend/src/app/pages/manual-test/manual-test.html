@@ -1,34 +1,45 @@
-<div class="container p-3">
-  <h3>Manual Tests</h3>
-  <label>Project:
-    <select [ngModel]="selectedProjectId" (ngModelChange)="onProjectChange($event)">
+<div class="bg-white p-4 rounded shadow">
+  <h3 class="text-lg font-semibold">Manual Tests</h3>
+
+  <div class="mt-3 flex gap-3 items-center">
+    <label class="text-sm">Project</label>
+    <select class="border rounded px-2 py-1" [ngModel]="selectedProjectId" (ngModelChange)="onProjectChange($event)">
       <option [value]="0">-- select --</option>
-      <option *ngFor="let p of projects" [value]="p.id">{{p.name}}</option>
+      <option *ngFor="let p of projects" [value]="p.id">{{ p.name }}</option>
     </select>
-  </label>
+  </div>
 
-  <div class="mt-3" [formGroup]="newTestForm">
-    <h4>Create Test Case</h4>
-    <input placeholder="Title" formControlName="title" />
+  <div class="mt-4" [formGroup]="newTestForm">
+    <div class="mb-2"><label class="block text-sm">Title</label>
+      <input formControlName="title" class="w-full border rounded px-3 py-2" placeholder="Test case title" />
+    </div>
 
-    <div formArrayName="steps">
-      <div *ngFor="let s of steps.controls; let i = index">
-        <input [formControlName]="i" placeholder="Step {{ i + 1 }}" />
+    <div formArrayName="steps" class="space-y-2">
+      <div *ngFor="let s of steps.controls; let i = index" class="flex gap-2 items-center">
+        <input [formControlName]="i" class="flex-1 border rounded px-3 py-2" placeholder="Step {{ i+1 }}" />
+        <button type="button" class="px-3 py-1 bg-slate-100 rounded" (click)="steps.removeAt(i)">Remove</button>
       </div>
     </div>
 
-    <button type="button" (click)="addStep()">Add step</button>
-    <button type="button" (click)="createTest()">Create</button>
+    <div class="mt-3 flex gap-2">
+      <button type="button" class="px-3 py-1 bg-sky-600 text-white rounded" (click)="addStep()">Add step</button>
+      <button type="button" class="px-3 py-1 bg-green-600 text-white rounded" (click)="createTest()">Create</button>
+    </div>
   </div>
 
-  <hr />
-  <h4>Test Cases</h4>
-  <ul>
-    <li *ngFor="let t of testcases">
-      <strong>{{ t.title }}</strong>
-      <button (click)="runTest(t)">Run</button>
-      <div *ngIf="t.steps">
-        <small *ngFor="let s of t.steps">{{ s }} | </small>
+  <hr class="my-4" />
+
+  <h4 class="text-md font-medium">Test Cases</h4>
+  <ul class="mt-2 divide-y">
+    <li *ngFor="let t of testcases" class="py-3 flex justify-between items-start">
+      <div>
+        <div class="font-medium">{{ t.title }}</div>
+        <div class="text-sm text-slate-500">
+          <span *ngFor="let s of t.steps; let idx = index">{{ idx+1 }}. {{ s }} <span *ngIf="idx < (t.steps.length-1)">|</span></span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-2">
+        <button (click)="runTest(t)" class="px-3 py-1 bg-amber-500 text-white rounded">Run</button>
       </div>
     </li>
   </ul>

@@ -1,22 +1,16 @@
-import os
 from flask import Flask
 from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///test.db')
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
     CORS(app)
-    db.init_app(app)
 
-    from .api import bp as api_bp
-    app.register_blueprint(api_bp, url_prefix='/api')
+    # Absolute import
+    from app.routes import api_bp  
+    app.register_blueprint(api_bp, url_prefix="/api")
 
-    with app.app_context():
-        db.create_all()
+    @app.route("/")
+    def index():
+        return {"message": "Flask backend is running!"}
 
     return app

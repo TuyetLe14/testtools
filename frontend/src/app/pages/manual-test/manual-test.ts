@@ -1,88 +1,43 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../../services/api';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; 
-import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormArray, FormGroup } from '@angular/forms';
+import { ApiService } from '../../services/api';
 
 @Component({
   selector: 'app-manual-test',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],  
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './manual-test.html',
-  styleUrls: [ './manual-test.css'],
+  styleUrls: ['./manual-test.css']
 })
 export class ManualTestComponent implements OnInit {
   projects: any[] = [];
-  selectedProjectId = 0;
   testcases: any[] = [];
+  selectedProjectId = 0;
+  newTestForm: FormGroup;
 
-  newTestForm!: FormGroup;
-
-  constructor(private api: ApiService, private fb: FormBuilder) {}
-
-  ngOnInit(): void {
+  constructor(private fb: FormBuilder, private api: ApiService) {
     this.newTestForm = this.fb.group({
-      title: ['', Validators.required],
-      steps: this.fb.array([this.fb.control('', Validators.required)]),
-    });
-
-    this.api.getProjects().subscribe({
-      next: (r) => (this.projects = r || []),
-      error: (err) => console.error('Error loading projects', err),
+      title: [''],
+      steps: this.fb.array([this.fb.control('')])
     });
   }
 
-  get steps(): FormArray {
-    return this.newTestForm.get('steps') as FormArray;
+  ngOnInit(){ this.api.getProjects().subscribe(r => this.projects = r || []); }
+
+  get steps() { return this.newTestForm.get('steps') as FormArray; }
+  addStep(){ this.steps.push(this.fb.control('')); }
+
+  onProjectChange(id:number){ this.selectedProjectId = Number(id); this.loadTests(); }
+  loadTests(){ if(!this.selectedProjectId) return; this.api.getTests(this.selectedProjectId).subscribe(r => this.testcases = r || []); }
+
+  createTest(){
+    if(!this.selectedProjectId) { alert('Select project'); return; }
+    const payload = {...this.newTestForm.value, type:'manual'};
+    this.api.createTestCase(this.selectedProjectId, payload).subscribe(() => { alert('Created'); this.loadTests(); });
   }
 
-  addStep() {
-    this.steps.push(this.fb.control('', Validators.required));
+  runTest(tc:any){
+    this.api.runTest(tc.id).subscribe((res:any) => { alert('Run queued. Task: ' + (res.task_id || res.taskId || res.task)); });
   }
-
-  removeStep(i: number) {
-    this.steps.removeAt(i);
-  }
-
-  createTest() {
-    if (!this.selectedProjectId) {
-      alert('Select project');
-      return;
-    }
-
-    const data = {
-      title: this.newTestForm.value.title,
-      steps: this.newTestForm.value.steps,
-      type: 'manual',
-    };
-
-    this.api.createTestCase(this.selectedProjectId, data).subscribe({
-      next: () => {
-        alert('Created test case');
-        this.loadTests();
-      },
-      error: (err) => console.error('Error creating test case', err),
-    });
-  }
-
-  loadTests() {
-    if (!this.selectedProjectId) return;
-    this.api.getTests(this.selectedProjectId).subscribe({
-      next: (r) => (this.testcases = r || []),
-      error: (err) => console.error('Error loading tests', err),
-    });
-  }
-
-  runTest(tc: any) {
-    this.api.runTest(tc.id).subscribe({
-      next: (res) => alert('Test enqueued. Run id: ' + res.run_id),
-      error: (err) => console.error('Error running test', err),
-    });
-  }
-
-  onProjectChange(id: number) {
-  this.selectedProjectId = id;
-  this.loadTests();
- }
-
 }

@@ -1,13 +1,40 @@
-<div class="container p-3">
-  <h2>Tester Hub - Dashboard</h2>
-  <nav>
-    <a routerLink="/manual">Manual</a> |
-    <a routerLink="/automation">Automation</a> |
-    <a routerLink="/performance">Performance</a>
-  </nav>
-  <hr />
-  <h4>Projects</h4>
-  <ul>
-    <li *ngFor="let p of projects">{{p.name}} - {{p.description}}</li>
-  </ul>
+<div class="grid grid-cols-3 gap-6">
+  <div class="col-span-2 space-y-4">
+    <div class="bg-white p-4 rounded shadow">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Projects</h3>
+        <button class="px-3 py-1 bg-blue-600 text-white rounded">New Project</button>
+      </div>
+      <ul class="mt-3 divide-y">
+        <li *ngFor="let p of projects" class="py-3 flex justify-between items-center">
+          <div>
+            <div class="font-medium">{{ p.name }}</div>
+            <div class="text-sm text-slate-500">{{ p.description }}</div>
+          </div>
+          <div class="text-sm text-slate-400">ID: {{ p.id }}</div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="bg-white p-4 rounded shadow">
+      <h3 class="text-lg font-semibold">Recent Test Runs</h3>
+      <p class="text-sm text-slate-500 mt-2">Shows last runs — backend must support /runs endpoint to show details.</p>
+    </div>
+  </div>
+
+  <div>
+    <div class="bg-white p-4 rounded shadow">
+      <h3 class="text-lg font-semibold">Quick Stats</h3>
+      <div class="grid grid-cols-2 gap-3 mt-4">
+        <div class="p-3 bg-slate-50 rounded">
+          <div class="text-sm text-slate-500">Projects</div>
+          <div class="text-2xl font-bold">{{ projects.length }}</div>
+        </div>
+        <div class="p-3 bg-slate-50 rounded">
+          <div class="text-sm text-slate-500">Active Runs</div>
+          <div class="text-2xl font-bold">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

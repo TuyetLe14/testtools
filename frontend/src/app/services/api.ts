@@ -2,35 +2,18 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class ApiService {
-  private BASE = 'http://localhost:5000/api';
+  base = 'http://localhost:5000/api';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  getProjects(): Observable<any> {
-    return this.http.get(`${this.BASE}/projects`);
-  }
+  getProjects(): Observable<any[]> { return this.http.get<any[]>(`${this.base}/projects`); }
+  createProject(data:any){ return this.http.post(`${this.base}/projects`, data); }
 
-  createProject(data:any): Observable<any> {
-    return this.http.post(`${this.BASE}/projects`, data);
-  }
+  getTests(projectId:number){ return this.http.get<any[]>(`${this.base}/projects/${projectId}/tests`); }
+  createTestCase(projectId:number, data:any){ return this.http.post(`${this.base}/projects/${projectId}/tests`, data); }
 
-  createTestCase(projectId:number, data:any): Observable<any> {
-    return this.http.post(`${this.BASE}/projects/${projectId}/tests`, data);
-  }
-
-  getTests(projectId:number): Observable<any> {
-    return this.http.get(`${this.BASE}/projects/${projectId}/tests`);
-  }
-
-  runTest(testId:number): Observable<any> {
-    return this.http.post(`${this.BASE}/tests/${testId}/run`, {});
-  }
-
-  getRun(runId:number): Observable<any> {
-    return this.http.get(`${this.BASE}/runs/${runId}`);
-  }
+  runTest(testId:number){ return this.http.post<any>(`${this.base}/tests/${testId}/run`, {}); }
+  getRun(runId:number){ return this.http.get<any>(`${this.base}/runs/${runId}`); }
 }
