@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard';
-import { ManualTestComponent } from './manual-test/manual-test';
+import { ManualComponent } from './manual-test/manual-test';
 import { AutomationComponent } from './automation/automation';
 import { PerformanceComponent } from './performance/performance';
 
@@ -9,13 +9,13 @@ import { PerformanceComponent } from './performance/performance';
   imports: [
     RouterModule,
     DashboardComponent,
-    ManualTestComponent,
+    ManualComponent,
     AutomationComponent,
     PerformanceComponent
   ],
   exports: [
     DashboardComponent,
-    ManualTestComponent,
+    ManualComponent,
     AutomationComponent,
     PerformanceComponent
   ]

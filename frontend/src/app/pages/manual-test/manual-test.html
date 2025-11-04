@@ -10,14 +10,15 @@
   </div>
 
   <div class="mt-4" [formGroup]="newTestForm">
-    <div class="mb-2"><label class="block text-sm">Title</label>
+    <div class="mb-2">
+      <label class="block text-sm">Title</label>
       <input formControlName="title" class="w-full border rounded px-3 py-2" placeholder="Test case title" />
     </div>
 
     <div formArrayName="steps" class="space-y-2">
       <div *ngFor="let s of steps.controls; let i = index" class="flex gap-2 items-center">
         <input [formControlName]="i" class="flex-1 border rounded px-3 py-2" placeholder="Step {{ i+1 }}" />
-        <button type="button" class="px-3 py-1 bg-slate-100 rounded" (click)="steps.removeAt(i)">Remove</button>
+        <button type="button" class="px-3 py-1 bg-slate-100 rounded" (click)="removeStep(i)" [disabled]="i===0">Remove</button>
       </div>
     </div>
 
@@ -30,6 +31,7 @@
   <hr class="my-4" />
 
   <h4 class="text-md font-medium">Test Cases</h4>
+  <div *ngIf="isLoading" class="py-4">Loading...</div>
   <ul class="mt-2 divide-y">
     <li *ngFor="let t of testcases" class="py-3 flex justify-between items-start">
       <div>

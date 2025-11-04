@@ -1,10 +1,9 @@
-<div class="flex h-screen">
-  <!-- Sidebar -->
-  <aside class="w-64 bg-white border-r">
+<div class="flex h-screen bg-slate-50">
+  <aside class="w-64 bg-white border-r flex flex-col">
     <div class="p-4 border-b">
       <div class="text-xl font-bold">🧭 Tester Hub</div>
     </div>
-    <nav class="p-3 space-y-1">
+    <nav class="p-3 flex-1 space-y-1">
       <a *ngFor="let it of menu"
          [routerLink]="it.path"
          routerLinkActive="bg-blue-50 text-blue-700"
@@ -13,17 +12,12 @@
         <span class="text-sm">{{ it.label }}</span>
       </a>
     </nav>
-    <div class="mt-auto p-4 text-xs text-gray-500">
-      v1.0 — Local Demo
-    </div>
+    <div class="p-3 text-xs text-gray-500 border-t">v1.0 — Local</div>
   </aside>
 
-  <!-- Main -->
   <div class="flex-1 flex flex-col">
-    <!-- Topbar -->
     <header class="flex items-center justify-between bg-white border-b p-4">
       <div class="flex items-center gap-4">
-        <button class="md:hidden p-2 rounded bg-slate-100">☰</button>
         <div class="text-lg font-semibold">{{ title }}</div>
       </div>
       <div class="flex items-center gap-3">
@@ -32,7 +26,6 @@
       </div>
     </header>
 
-    <!-- Content -->
     <main class="p-6 overflow-auto">
       <router-outlet></router-outlet>
     </main>
