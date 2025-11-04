@@ -6,24 +6,8 @@ import { LucideAngularModule } from 'lucide-angular';
   selector: 'app-header',
   standalone: true,
   imports: [CommonModule, LucideAngularModule],
-  template: `
-  <header class="flex items-center justify-between p-4 border-b dark:border-slate-700 bg-white dark:bg-slate-800">
-    <div class="flex items-center gap-3">
-      <button class="p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700" (click)="toggleSidebar.emit()">
-        <lucide-icon name="menu"></lucide-icon>
-      </button>
-      <div class="text-lg font-semibold">Tester Hub</div>
-    </div>
-
-    <div class="flex items-center gap-4">
-      <input type="text" placeholder="Search..." class="px-3 py-2 rounded border dark:border-slate-700 bg-slate-50 dark:bg-slate-900" (input)="onSearch($any($event.target).value)"/>
-      <button (click)="toggleTheme()" class="p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700">
-        <lucide-icon [name]="isDark() ? 'sun' : 'moon'"></lucide-icon>
-      </button>
-      <div class="w-8 h-8 rounded-full bg-indigo-500 text-white flex items-center justify-center">TU</div>
-    </div>
-  </header>
-  `,
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.css'],
   outputs: ['toggleSidebar'],
 })
 export class HeaderComponent {

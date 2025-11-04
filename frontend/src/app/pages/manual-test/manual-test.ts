@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ProjectService } from '../../services/project.service';
 import { TestcaseService } from '../../services/testcase.service';
 
@@ -14,9 +14,9 @@ export interface TestCasePayload {
 @Component({
   selector: 'app-manual-test',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './manual-test.html',
-  styleUrl: './manual-test.css',
+  styleUrls: ['./manual-test.css'], 
 })
 export class ManualComponent {
   form: FormGroup;
@@ -27,9 +27,9 @@ export class ManualComponent {
   isLoading = false;
 
   constructor(
+    private fb: FormBuilder,
     private projectService: ProjectService,
-    private testcase: TestcaseService,
-    private fb: FormBuilder
+    private testcase: TestcaseService
   ) {
     this.form = this.fb.group({
       project_id: [''],
@@ -38,23 +38,25 @@ export class ManualComponent {
     });
   }
 
+  // ✅ getter cho FormArray
   get steps(): FormArray {
     return this.form.get('steps') as FormArray;
   }
 
+  // ✅ khi chọn project → load test case tương ứng
   onProjectChange(projectId: number) {
     this.selectedProjectId = projectId;
-    this.loadTestcases(projectId);
+    if (projectId) this.loadTestcases(projectId);
   }
 
   loadTestcases(projectId: number) {
     this.isLoading = true;
     this.testcase.getByProject(projectId).subscribe({
       next: (data: any) => {
-        this.testcases = data;
+        this.testcases = data || [];
         this.isLoading = false;
       },
-      error: (err: any) => {
+      error: (err: unknown) => {
         console.error('❌ Load testcases failed:', err);
         this.isLoading = false;
       },
@@ -73,9 +75,9 @@ export class ManualComponent {
     const value = this.form.value;
 
     const payload: TestCasePayload = {
-      project_id: Number(value.project_id ?? 0),
-      title: value.title ?? '',
-      steps: (value.steps ?? []).map((s: any) => s || ''),
+      project_id: Number(value.project_id || 0),
+      title: value.title || '',
+      steps: (value.steps as string[]) || [],
       created_by: 1,
     };
 
@@ -86,7 +88,9 @@ export class ManualComponent {
         this.form.setControl('steps', this.fb.array([this.fb.control('Step 1')]));
         if (this.selectedProjectId) this.loadTestcases(this.selectedProjectId);
       },
-      error: (err: any) => console.error('❌ Create failed:', err),
+      error: (err: unknown) => {
+        console.error('❌ Create failed:', err);
+      },
     });
   }
 
@@ -97,8 +101,8 @@ export class ManualComponent {
 
   ngOnInit() {
     this.projectService.getAll().subscribe({
-      next: (res: any) => (this.projects = res),
-      error: (err: any) => console.error('❌ Load projects failed:', err),
+      next: (res: any) => (this.projects = res || []),
+      error: (err: unknown) => console.error('❌ Load projects failed:', err),
     });
   }
 }

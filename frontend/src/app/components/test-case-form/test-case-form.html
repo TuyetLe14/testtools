@@ -1,1 +1,69 @@
-<p>test-case-form works!</p>
+<form class="p-4 border rounded shadow-sm bg-white space-y-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <h3 class="text-xl font-semibold mb-2">🧩 New Test Case</h3>
+
+  <div>
+    <label class="block font-semibold mb-1">Title</label>
+    <input
+      formControlName="title"
+      type="text"
+      class="w-full border rounded px-3 py-1"
+      placeholder="Enter test case title"
+    />
+  </div>
+
+  <div>
+    <label class="block font-semibold mb-1">Description</label>
+    <textarea
+      formControlName="description"
+      rows="3"
+      class="w-full border rounded px-3 py-1"
+      placeholder="Describe the test case"
+    ></textarea>
+  </div>
+
+  <div formArrayName="steps">
+    <label class="block font-semibold mb-1">Steps</label>
+    <div *ngFor="let step of steps.controls; let i = index" class="flex items-center gap-2 mb-2">
+      <input
+        [formControlName]="i"
+        type="text"
+        class="flex-1 border rounded px-3 py-1"
+        placeholder="Step {{ i + 1 }}"
+      />
+      <button type="button" (click)="removeStep(i)" class="bg-red-500 text-white px-2 py-1 rounded">
+        ✕
+      </button>
+    </div>
+    <button type="button" (click)="addStep()" class="bg-blue-500 text-white px-3 py-1 rounded">
+      ➕ Add Step
+    </button>
+  </div>
+
+  <div>
+    <label class="block font-semibold mb-1">Expected Result</label>
+    <input
+      formControlName="expected"
+      type="text"
+      class="w-full border rounded px-3 py-1"
+      placeholder="Expected outcome"
+    />
+  </div>
+
+  <div>
+    <label class="block font-semibold mb-1">Priority</label>
+    <select formControlName="priority" class="border rounded px-2 py-1">
+      <option value="low">Low</option>
+      <option value="medium">Medium</option>
+      <option value="high">High</option>
+    </select>
+  </div>
+
+  <div class="pt-2">
+    <button
+      type="submit"
+      class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+    >
+      ✅ Save Test Case
+    </button>
+  </div>
+</form>

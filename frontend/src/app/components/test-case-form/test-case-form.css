@@ -1,0 +1,7 @@
+form {
+  transition: all 0.2s ease-in-out;
+}
+
+form:focus-within {
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.3);
+}
