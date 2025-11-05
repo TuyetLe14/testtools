@@ -38,12 +38,10 @@ export class ManualComponent {
     });
   }
 
-  // ✅ getter cho FormArray
   get steps(): FormArray {
     return this.form.get('steps') as FormArray;
   }
 
-  // ✅ khi chọn project → load test case tương ứng
   onProjectChange(projectId: number) {
     this.selectedProjectId = projectId;
     if (projectId) this.loadTestcases(projectId);
